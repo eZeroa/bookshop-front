@@ -37,11 +37,14 @@
                         </Card>
                     </div>
                 </Col>
-
-
             </Row>
         </div>
 
+        <br>
+        <div id="center">
+            <Page :current="nowPage" :total="total" simple disabled/>
+
+        </div>
 
     </div>
 </template>
@@ -56,6 +59,8 @@
                 msg: [],
                 childMsg: [],
                 commodities: [],
+                nowPage: 1,
+                total: 1,
             }
         },
         mounted() {

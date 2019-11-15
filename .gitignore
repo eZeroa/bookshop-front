@@ -1,5 +1,5 @@
 .DS_Store
-../../WebstormProjects/bookshop-front/node_modules
+/node_modules
 /dist
 
 # local env files

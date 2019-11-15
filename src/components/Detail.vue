@@ -41,6 +41,7 @@
             return {
                 commodity: {},
                 id: '',
+                message: '',
             }
         },
         mounted() {
@@ -48,13 +49,20 @@
             this.getCommodity();
         },
         methods: {
+            open(nodesc) {
+                this.$Notice.open({
+                    title: '提示',
+                    desc: nodesc ? '' : this.message
+                });
+            },
             getCommodity: function () {
                 this.axios.get(this.serverAddress + '/commodity/get/' + this.id)
                     .then(value => {
                         if ('200' == value.data.code) {
                             this.commodity = JSON.parse(value.data.msg);
                         } else {
-                            alert("服务器繁忙")
+                            this.message = '服务器繁忙';
+                            this.open(false);
                         }
                     })
                     .catch(reason => {
@@ -65,7 +73,15 @@
                 this.axios.get(this.serverAddress + '/shopping-cart/add/' + this.id)
                     .then(value => {
                         if ('200' == value.data.code) {
-                            alert("添加成功, 请到购物车查看")
+                            let username = localStorage.getItem('username');
+                            if ('' === username || null == username || '' == username) {
+                                this.message = '请先登录';
+                                this.open(false);
+                                open("/login");
+                            } else {
+                                this.message = '添加成功, 请到购物车查看';
+                                this.open(false)
+                            }
                         }
                     })
             }

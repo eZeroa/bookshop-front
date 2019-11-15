@@ -3,7 +3,7 @@
         <Table border ref="selection" :columns="columns4" :data="msg" @on-selection-change="getSelect()"></Table>
         <br>
         <div id="center">
-            <Page :current="nowPage" :total="total" simple/>
+            <Page :current="nowPage" :total="total" simple disabled/>
         </div>
         <Button @click="handleSelectAll(true)">全选</Button>
         <Button type="warning" style="margin-left: 83%; margin-right: 1%" @click="deleteOrderTableBySelect()">取消订单
@@ -50,13 +50,21 @@
                 index: 0,
                 selectOrderTable: [],
                 orderTables: [],
+                message: '',
 
             }
         },
+        inject: ['reload'],
         mounted() {
             this.getUsersOrderTable()
         },
         methods: {
+            open(nodesc) {
+                this.$Notice.open({
+                    title: '提示',
+                    desc: nodesc ? '' : this.message
+                });
+            },
             // 获取被选择的订单
             getSelect: function () {
                 this.selectOrderTable = this.$refs.selection.getSelection();
@@ -71,10 +79,14 @@
                         if ('200' == value.data.code) {
                             this.msg = JSON.parse(value.data.msg);
                             this.total = this.msg.length;
+                        } else {
+                            this.message = value.data.msg;
+                            this.open(false);
                         }
                     })
                     .catch(() => {
-                        alert("服务器繁忙");
+                        this.message = '服务器繁忙';
+                        this.open(false);
                     })
             },
             deleteOrderTableBySelect: function () {
@@ -91,8 +103,8 @@
                 ),)
                     .then(value => {
                         if ('200' == value.data.code) {
-                            alert("删除成功")
-
+                            this.message = '删除成功';
+                            this.open(false);
                         }
                     })
             },

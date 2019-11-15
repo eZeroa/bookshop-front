@@ -4,6 +4,11 @@ import Users from "@/components/Users";
 import Login from "@/components/Login";
 import Index from "@/components/Index";
 import Detail from "@/components/Detail";
+import UsersMessage from "../components/UsersMessage";
+import AboutUs from "../components/AboutUs";
+import ProjectInformation from "../components/ProjectInformation";
+import UsersInformation from "../components/UsersInformation";
+import Logout from "../components/Logout";
 
 export default ({
     routes: [              //配置路由 这里是个数组
@@ -24,6 +29,25 @@ export default ({
             path: '/users',
             component: Users,
             children: [
+                {
+                    path: '',
+                    component: UsersMessage,
+                    children: [
+                        {
+                            path: 'aboutUs',
+                            component: AboutUs,
+                        },
+                        {
+                            path: 'projectInformation',
+                            component: ProjectInformation,
+                        },
+                        {
+                            path: 'usersInformation',
+                            component: UsersInformation,
+                        },
+
+                    ]
+                }
             ],
         },
         {
@@ -34,6 +58,10 @@ export default ({
         {
             path: '/detail/:commodityId',
             component: Detail
-        }
+        },
+        {
+            path: '/logout',
+            component: Logout,
+        },
     ]
 })

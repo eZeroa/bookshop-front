@@ -3,7 +3,7 @@
         <Table border ref="selection" :columns="columns4" :data="msg" @on-selection-change="getSelect()"></Table>
 
         <div id="center">
-            <Page :current="nowPage" :total="total" simple/>
+            <Page :current="nowPage" :total="total" simple disabled/>
 
         </div>
         <Button @click="handleSelectAll(true)">全选</Button>
@@ -52,22 +52,36 @@
                 msg: [],
                 selectCommodities: [],
                 commodities: [],
+                message: '',
 
             }
         },
+        inject: ['reload'],
         mounted() {
             this.getShoppingCart()
         },
         methods: {
+            open(nodesc) {
+                this.$Notice.open({
+                    title: '提示',
+                    desc: nodesc ? '' : this.message
+                });
+            },
             getShoppingCart: function getShoppingCart() {
                 this.axios.get(this.serverAddress + '/shopping-cart/all')
                     .then(resp => {
-                        // 解析 JSON
-                        this.msg = JSON.parse(resp.data.msg);
-                        this.total = this.msg.length
+                        if ('200' == resp.data.code) {
+                            // 解析 JSON
+                            this.msg = JSON.parse(resp.data.msg);
+                            this.total = this.msg.length;
+                        } else {
+                            this.message = resp.data.msg;
+                            this.open(false);
+                        }
+
                     })
                     .catch(() => {
-                        alert("服务器繁忙");
+                        this.message = '服务器繁忙';
                     })
             },
             handleSelectAll() {
@@ -88,8 +102,8 @@
                 ),)
                     .then(value => {
                         if ('200' == value.data.code) {
-                            alert("删除成功")
-
+                            this.message = '删除成功';
+                            this.open(false);
                         }
                     })
             },
@@ -115,7 +129,8 @@
                 ),)
                     .then(value => {
                         if ('200' == value.data.code) {
-                            alert("正在创建订单")
+                            this.message = '正在创建订单';
+                            this.open(false);
                         }
                     })
             }

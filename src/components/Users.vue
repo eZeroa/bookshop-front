@@ -1,6 +1,5 @@
 <template>
     <div id="users">
-        用户
         <router-view></router-view>
     </div>
 </template>
@@ -22,10 +21,17 @@
         },
         methods: {
             login: function login() {
-                let token = localStorage.token;
-                token = null;
+                this.axios
+                    .get(this.serverAddress + '/users/getUsers')
+                    .then(value => {
+                        if ('403' == value.data.code) {
+                            localStorage.removeItem('username')
+                        }
+                    });
+
+                let token = localStorage.getItem('username');
                 if (token != null) {
-                    alert(token)
+                    this.$router.push('/users/usersInformation')
                 } else {
                     // 跳转登录页面
                     this.$router.push('/login')

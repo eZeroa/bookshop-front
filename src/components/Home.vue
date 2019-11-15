@@ -1,7 +1,7 @@
 <template>
     <div class="layout">
         <Layout>
-            <Header :style="{position: 'fixed', width: '100%'}" style="background-color: white">
+            <Header :style="{position: 'fixed', width: '100%'}" style="background-color: white; z-index: 999; top: 0">
                 <Menu mode="horizontal" theme="light" active-name="1">
                     <div class="layout-logo">
                         <img src="../assets/logo.png" style="width: inherit; height: inherit" alt="">
@@ -23,7 +23,7 @@
                         </MenuItem>
                         <MenuItem name="4">
 							<Icon type="ios-person-outline" />
-                            <router-link to="/users" disabled="">用户</router-link>
+                            <router-link to="/users" >用户</router-link>
 
                         </MenuItem>
                     </div>

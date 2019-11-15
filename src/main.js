@@ -6,6 +6,9 @@ import VueRouter from 'vue-router'
 import axios from 'axios'
 import Qs from 'qs'
 
+// 解决跨域 session 问题
+axios.defaults.withCredentials=true;
+
 Vue.prototype.axios = axios;
 Vue.prototype.qs = Qs;
 
@@ -20,6 +23,7 @@ routerConfig.mode = 'history';
 const router = new VueRouter(routerConfig);
 
 Vue.prototype.serverAddress = 'http://api.0713.ink:7130/suse.bookshop';
+
 
 new Vue({
   render: h => h(App),
